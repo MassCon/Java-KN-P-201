@@ -1,10 +1,13 @@
 package step.learning.oop;
 
-public class Book extends Literature {
+public class Book extends Literature
+                    implements Copyable, Multiple{
 
     private String author;
+    private int count;
 
     public Book(String author, String title) {
+        this.count =1;
         this.author = author;
         super.setTitle(title);
     }
@@ -24,5 +27,10 @@ public class Book extends Literature {
                 getAuthor(),
                 getTitle()
         );
+    }
+
+    @Override
+    public int getCount() {
+        return count;
     }
 }
