@@ -1,5 +1,7 @@
 package step.learning.oop;
 
+import com.google.gson.JsonObject;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,6 +30,32 @@ public class Hologram extends Literature implements Printable{
                 getTitle(),
                 dateFormat.format(this.getDate()),
                 getDescription()
+        );
+    }
+
+    public static boolean isParseableFromJson(JsonObject jsonObject) {
+        String[] requiredFields = {"title", "description", "date"};
+        for (String field : requiredFields) {
+            if (!jsonObject.has(field)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
+    public static Hologram fromJson(JsonObject jsonObject) throws ParseException {
+        String[] requiredFields = {"title", "description", "date"};
+        for (String field : requiredFields) {
+            if (!jsonObject.has(field)) {
+                throw new ParseException("Missing required field: " + field, 0);
+            }
+        }
+
+        return new Hologram(
+                jsonObject.get(requiredFields[0]).getAsString(),
+                jsonObject.get(requiredFields[1]).getAsString(),
+                jsonObject.get(requiredFields[2]).getAsString()
         );
     }
 

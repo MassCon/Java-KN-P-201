@@ -1,5 +1,9 @@
 package step.learning.oop;
 
+import com.google.gson.JsonObject;
+
+import java.text.ParseException;
+
 public class Book extends Literature
                     implements Copyable, Multiple{
 
@@ -32,5 +36,29 @@ public class Book extends Literature
     @Override
     public int getCount() {
         return count;
+    }
+
+    public static Book fromJson(JsonObject jsonObject) throws ParseException {
+        String[] requiredFields = {"author", "title"};
+        for (String field : requiredFields){
+            if(!jsonObject.has(field)){
+                throw new ParseException("Missing required field: " + field, 0);
+            }
+        }
+
+        return new Book(
+                jsonObject.get(requiredFields[0]).getAsString(),
+                jsonObject.get(requiredFields[1]).getAsString()
+        );
+    }
+
+    public static boolean isParseableFromJson(JsonObject jsonObject){
+        String[] requiredFields = {"author", "title"};
+        for (String field : requiredFields){
+            if(!jsonObject.has(field)){
+                return false;
+            }
+        }
+        return true;
     }
 }
