@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-
+@Serializable
 public class Hologram extends Literature implements Printable{
     private Date date;
     private String description;
@@ -33,6 +33,7 @@ public class Hologram extends Literature implements Printable{
         );
     }
 
+    @ParseChecker
     public static boolean isParseableFromJson(JsonObject jsonObject) {
         String[] requiredFields = {"title", "description", "date"};
         for (String field : requiredFields) {
@@ -74,4 +75,6 @@ public class Hologram extends Literature implements Printable{
     public void setDescription(String description) {
         this.description = description;
     }
+
+
 }

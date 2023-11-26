@@ -3,11 +3,13 @@ package step.learning.oop;
 import com.google.gson.*;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -23,10 +25,29 @@ public class Library {
         funds.add(literature);
     }
 
+    public List<Literature> GetFunds()
+    {
+        return funds;
+    }
+
+    public List<Literature> getSerializableFunds()
+    {
+        List<Literature> serializableFunds = new ArrayList<>();
+        for (Literature literature : GetFunds()) {
+            if(literature.getClass().isAnnotationPresent(Serializable.class)){
+                serializableFunds.add(literature);
+            }
+        }
+        return serializableFunds;
+    }
+
     public void save() throws IOException {
-        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd").create();
+        Gson gson = new GsonBuilder().
+                setDateFormat("yyyy-MM-dd")
+                .setPrettyPrinting()
+                .create();
         FileWriter writer = new FileWriter( "./src/main/resources/library.json" ) ;
-        writer.write( gson.toJson( this.getFunds() ) ) ;
+        writer.write( gson.toJson( this.getSerializableFunds() ) ) ;
         writer.close() ;
     }
 
@@ -52,12 +73,62 @@ public class Library {
 
     }
 
+    private List<Class<?>> getSerializableClasses(){
+
+        List<Class<?>> literatures = new LinkedList<>();
+        String className = Literature.class.getName();
+        String packageName = className.substring(0, className.lastIndexOf('.'));
+        String packagePath = packageName.replace(".", "/");
+        String absolutePath = Literature.class.getClassLoader()
+                .getResource(packagePath).getPath();
+        File[] files = new File(absolutePath).listFiles();
+        if(files ==null){
+            throw new RuntimeException("Class path inaceptable");
+        }
+        for (File file : files){
+            if(file.isFile()){
+                String filename = file.getName();
+                if(filename.endsWith(".class")){
+                    String fileClassName = filename.substring(0, filename.lastIndexOf('.')  );
+                    try {
+                        Class<?> fileClass = Class.forName(packageName + "." + fileClassName);
+                        if(fileClass.isAnnotationPresent(Serializable.class)){
+                            literatures.add(fileClass);
+                        }
+                    }
+                    catch (ClassNotFoundException ignored) {
+                        continue;
+                    }
+                }
+            }
+            else if(file.isDirectory()){
+                continue;
+            }
+        }
+        return literatures;
+    }
+
     private Literature fromJson(JsonObject jsonObject) throws java.text.ParseException {
-        Class<?>[] literatures = {Book.class, Journal.class, Newspaper.class, Hologram.class};
+
+        List<Class<?>> literatures = this.getSerializableClasses();
+
+        //Class<?>[] literatures = {Book.class, Journal.class, Newspaper.class, Hologram.class};
         try {
             for(Class<?> literature: literatures)
             {
-                Method isParseableFromJson = literature.getMethod("isParseableFromJson", JsonObject.class);
+                //Method isParseableFromJson = literature.getMethod("isParseableFromJson", JsonObject.class);
+                Method  isParseableFromJson = null;
+                for (Method method: literature.getDeclaredMethods()){
+                    if(method.isAnnotationPresent(ParseChecker.class)){
+                        if(isParseableFromJson != null){
+                            throw new java.text.ParseException("Multiple ParseCheker annotations", 0);
+                        }
+                        isParseableFromJson = method;
+                    }
+                }
+                if (isParseableFromJson == null) {
+                    continue;
+                }
                 isParseableFromJson.setAccessible(true);
                 boolean res = (boolean) isParseableFromJson.invoke(null, jsonObject);
                 if(res)

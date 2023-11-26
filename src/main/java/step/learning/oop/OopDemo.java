@@ -25,7 +25,7 @@ public class OopDemo {
         library.printAllCards();
     }
 
-    public void run4(){
+    public void run3(){
         String str = "{\"author\":\"D. Knuth\",\"title\":\"Art of programming\"}";
         JsonObject literatureObject = JsonParser.parseString(str).getAsJsonObject();
         Literature literature = null;
@@ -102,7 +102,7 @@ public class OopDemo {
             library.add(new Hologram("holo1", "dec1", "2023-09-25"));
             library.add(new Hologram("holo2", "dec2", "2023-09-25"));
 
-            //library.save();
+            library.save();
 
         }
         catch(Exception ex){

@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 
 import java.text.ParseException;
 
+@Serializable
 public class Journal extends Literature
                     implements Copyable, Periodic, Multiple{
     private int number;
@@ -56,6 +57,7 @@ public class Journal extends Literature
         );
     }
 
+    @ParseChecker
     public static boolean isParseableFromJson(JsonObject jsonObject){
         String[] requiredFields = {"title", "number"};
         for (String field : requiredFields){

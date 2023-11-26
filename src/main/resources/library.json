@@ -1,1 +1,30 @@
-[{"author":"D.Knuth","count":1,"title":"Art of Programming"},{"date":"2023-09-25","title":"Daily Mail"},{"number":157,"count":1,"title":"Quantum Mechanics"},{"author":"Richter","count":1,"title":"Platform .NET"},{"date":"2023-09-25","title":"Washington Post"},{"number":32,"count":1,"title":"Amogus Spawning"},{"date":"2023-09-25","description":"dec1","title":"holo1"},{"date":"2023-09-25","description":"dec2","title":"holo2"}]
+[
+  {
+    "author": "D.Knuth",
+    "count": 1,
+    "title": "Art of Programming"
+  },
+  {
+    "date": "2023-09-25",
+    "title": "Daily Mail"
+  },
+  {
+    "number": 157,
+    "count": 1,
+    "title": "Quantum Mechanics"
+  },
+  {
+    "author": "Richter",
+    "count": 1,
+    "title": "Platform .NET"
+  },
+  {
+    "date": "2023-09-25",
+    "title": "Washington Post"
+  },
+  {
+    "number": 32,
+    "count": 1,
+    "title": "Amogus Spawning"
+  }
+]

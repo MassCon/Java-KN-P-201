@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+@Serializable
 public class Newspaper extends Literature implements Periodic{
     private Date date;
     private static final SimpleDateFormat sqlDateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -56,6 +57,7 @@ public class Newspaper extends Literature implements Periodic{
         );
     }
 
+    @ParseChecker
     public static boolean isParseableFromJson(JsonObject jsonObject){
         String[] requiredFields = {"title", "date"};
         for (String field : requiredFields){
