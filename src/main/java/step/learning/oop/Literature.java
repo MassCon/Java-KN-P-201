@@ -5,6 +5,8 @@ import com.google.gson.JsonObject;
 import java.text.ParseException;
 
 public abstract class Literature {
+
+    @Required
     private String title;
 
     public String getTitle() {
