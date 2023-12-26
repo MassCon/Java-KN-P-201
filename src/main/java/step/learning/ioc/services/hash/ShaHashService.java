@@ -4,7 +4,9 @@ package step.learning.ioc.services.hash;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import com.google.inject.Singleton;
 
+@Singleton
 public class ShaHashService implements HashService {
 
     @Override
